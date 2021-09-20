@@ -83,4 +83,56 @@ array([False,  True, False,  True, False,  True])
 array([2,4,6])
 ```
   
-파이썬은 C나 C++보다 속도가 느려서 무거운 프로그램을 작성시 C/C++로 하는데 넘파이가 C/C++로 작성되었다
+파이썬은 C나 C++보다 속도가 느려서 C/C++로 만든 넘파이를 사용
+# matplotlib
+- - - -
+그래프를 그려주는 라이브러리
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0, 6, 0.1) #0부터 6까지 0.1의 단위로 생성
+y = np.sin(x) #sin함수에 대입
+
+#그래프 그리기
+plt.plot(x, y)
+plt.show()
+```
+![](matplotlib/image.png)
+
+pyplot의 기능
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0, 6, 0.1)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+plt.plot(x, y1, label="sin")
+plt.plot(x, y2, linestyle="--", label="cos") #점선으로 출력
+plt.xlabel("x") #x축 이름
+plt.ylabel("y") #y축 이름
+plt.title('sin & cos') #제목
+plt.legend() #그래프의 범례(우측 상단) 표시
+plt.show()
+```
+![](matplotlib/image.png)
+이미지 표시하기
+```python
+import matplotlib.pyplot as plt
+from matplotlib.image import imread
+
+img = imread('a.png') #이미지 경로
+
+plt.imshow(img)
+plt.show()
+```
+
+그외에 참조 할것들
+넘파이
+파이썬 라이브러리를 활용한 데이터분석
+<scipy 강의 노트>
+
+
