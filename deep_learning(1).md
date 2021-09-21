@@ -99,7 +99,8 @@ y = np.sin(x) #sin함수에 대입
 plt.plot(x, y)
 plt.show()
 ```
-![](matplotlib/image.png)
+![image](https://user-images.githubusercontent.com/91014308/134167962-27e30338-33c0-49f8-b3b1-81bb30bba091.png)
+
 
 pyplot의 기능
 ```python
@@ -118,8 +119,8 @@ plt.title('sin & cos') #제목
 plt.legend() #그래프의 범례(우측 상단) 표시
 plt.show()
 ```
-![](matplotlib/image.png)
-이미지 표시하기
+![image](https://user-images.githubusercontent.com/91014308/134168185-2931ca32-c932-42a0-8768-a8b05fc650ea.png)
+
 ```python
 import matplotlib.pyplot as plt
 from matplotlib.image import imread
