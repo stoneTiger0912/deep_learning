@@ -5,11 +5,11 @@
 
 *3.1* 신경망의 예
 맨 왼쪽에 입력층 가운데 층이 은닉층 그리고 오른쪽이 출력층
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168417-f7e5a0b2-8865-48ff-afd1-c5697529646e.png)
 
 편향을 명시한 퍼셉트론
 일반적인 퍼셉트론에 편향을 입력층에 추가
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168522-30ee8450-8777-4de9-ac57-c7c991a985b2.png)
 
 *3.2* 활성화 함수
        * 입력 신호의 총합이 활성화를 일으키는지 정하는 역할
@@ -63,8 +63,7 @@ plt.plot(x, y)
 plt.ylim(-0.1, 1.1) #y축 범위 지정
 plt.show()
 ```
-
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/image.png)
+![image](https://user-images.githubusercontent.com/91014308/134168648-3e6331ab-2773-473d-af51-c543ca698f25.png)
 
 
 	* 시그모이드 함수 구현
@@ -87,7 +86,7 @@ plt.plot(x, y)
 plt.ylim(-0.1, 1.1) # y축 볌위 지정
 plt.show()
 ```
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/image.png)
+![image](https://user-images.githubusercontent.com/91014308/134168710-31e2ef5c-bc24-4968-83df-28e8f8596068.png)
 
 * 시그모이드 함수와 계단 함수 비교차이점
 차이점
@@ -165,7 +164,7 @@ array([23, 53, 83)
 ```
 
 3.3.3 신경망에서의 행렬 곱
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168781-f960172e-49ea-4dc2-bffa-7074f37b9f92.png)
 dot(2,2x3)
 ```python
 >>> X = np.array([1, 2])
@@ -184,13 +183,13 @@ dot(2,2x3)
 
 **3.4** 3층 신경망 구현하기
 3.4.1 표기법
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168867-9d0fbe60-63ff-4173-8d2d-e737b2fdbee6.png)
 
 3.4.2 각 신호의 신호 전달 구현하기
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168934-d8d303cb-8275-4c62-97b2-b5e8b825322c.png)
 	* 편향의 경우 오른쪽 아래 인덱스가 다음층 뉴런밖에 없음
 
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+![image](https://user-images.githubusercontent.com/91014308/134168989-7bb2ba37-e3d6-456d-bb76-7066e8fd2a49.png)
 	* 0층에서 1층 구현
 ```python
 X = np.array([1.0, 0.5])
@@ -282,7 +281,7 @@ print(y) #[ 0.31682708  0.69627909]
 3.5.1 항등 함수와 소프트맥스 함수 구현
 	항등함수는 입력과 출력이 같은 y=x함수
 	소프트맥스 함수
-	![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+	![image](https://user-images.githubusercontent.com/91014308/134169072-a02cf8a9-5f22-4e05-9525-41ce0480e57d.png)
 
 ```python
 >>> a = np.array([0.3, 2.9, 4.0])
@@ -309,7 +308,8 @@ y = exp_a / sum_exp_a
 
 3.5.2 소프트맥스 함수 구현시 주의점
 	* 오버플로 가능성 높음
-![](*3*%20%EC%8B%A0%EA%B2%BD%EB%A7%9D/bear_sketch@2x.png)
+	* 대안으로 다음과 같이 활용
+![image](https://user-images.githubusercontent.com/91014308/134169147-31bd3fcc-e296-4f76-99f3-7f8b6de48d11.png)
 	* 지수 함수를 계산할때 특정 정수를 더해도 변화 없음
 	* 일반적으로 입력 신호 중 최대값을 사용
 ```python
