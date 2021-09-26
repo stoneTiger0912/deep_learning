@@ -11,5 +11,5 @@
 * deep_learning
 * linux master 
 * toeic
-* algorithmn
+* algorithm
 * network
