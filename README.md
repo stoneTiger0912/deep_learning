@@ -4,3 +4,12 @@
 
 # Markdown syntax reference
 <https://github.com/jinkyukim-me/markdown_ko>
+
+# to do
+* docker
+* github
+* deep_learning
+* linux master 
+* toeic
+* algorithmn
+* network
