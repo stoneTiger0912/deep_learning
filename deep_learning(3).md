@@ -329,3 +329,159 @@ exp_a = np.exp(a - c)
 sum_exp_a = np.sum(exp_a)
 y = exp_a / sum_exp_a
 ```
+
+
+소프트맥스 함수 특징
+```python
+>>> a = np.array([0.3, 2.9, 40])
+>>> y = softmax(a)
+>>> print(y)
+[ 0.1821 0.2451 0.7365]
+>>> np.sum(y)
+1.0
+```
+	출력값은 0~1사이
+	출력의 총합은 1
+	확률로 해석 가능
+	단조 증가 함수이기 때문에 대소관계는 변하지 않음
+
+**3.6** 손글씨 숫자 인식
+	* MNIST 데이터셋
+	손글씨 숫자 이미지 집합
+```python
+import sys, os
+sys.path.append(os.pardir)
+from dataset.mnist import load_mnist
+
+def load_mnist(normalize=True, flatten=True, one_hot_label=False):
+    if not os.path.exists(save_file):
+        init_mnist()
+        
+    with open(save_file, 'rb') as f:
+        dataset = pickle.load(f)
+    
+    if normalize:
+        for key in ('train_img', 'test_img'):
+            dataset[key] = dataset[key].astype(np.float32)
+            dataset[key] /= 255.0
+            
+    if one_hot_label:
+        dataset['train_label'] = _change_one_hot_label(dataset['train_label'])
+        dataset['test_label'] = _change_one_hot_label(dataset['test_label'])    
+    
+    if not flatten:
+         for key in ('train_img', 'test_img'):
+            dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
+
+    return (dataset['train_img'], dataset['train_label']), (dataset['test_img'], dataset['test_label']) 
+
+
+if __name__ == '__main__':
+    init_mnist()
+```
+	* load_mnist가 데이터셋을 처음 읽을경우 시간이 걸리는데 다음 부터는 pickle파일에 저장 되어서 빠르게 읽음
+	* load_mnist 반환값은 **"(훈련이미지, 훈련레이블), (시험 이미지, 시험 레이블)"** 형식으로 됨
+	* normalize는 입력값을 0.0 ~ 1.0사이의 값으로 정규화 할지 False는 0~255사이
+	* flatten는 입력 이미지를 True는 784개의 1차원 False는 1x28x28의 3차원 배열
+	* one_hot_label 
+	True: **원-핫 인코딩(정답을 뜻하는 1개의 원소만 1이고 나머지는 0)**형태로 저장 	Flase: 숫자 형태의 레이블을 저장
+
+3.6.2 신경망 추론 처리
+	* 입력층 뉴런 784개(28x28), 출력층 뉴런 10개(0~9사이의 숫자)
+	* 첫번째 은닉층은 50개, 두번째 은닉층은 100개로 가정
+	* 정확도를 평가하는 코드
+```python
+import sys, os
+sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
+import numpy as np
+import pickle
+from dataset.mnist import load_mnist
+from common.functions import sigmoid, softmax
+
+
+def get_data():
+    (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
+    return x_test, t_test
+
+
+def init_network():
+    with open("sample_weight.pkl", 'rb') as f:
+        network = pickle.load(f)
+    return network
+
+
+def predict(network, x):
+    W1, W2, W3 = network['W1'], network['W2'], network['W3']
+    b1, b2, b3 = network['b1'], network['b2'], network['b3']
+
+    a1 = np.dot(x, W1) + b1
+    z1 = sigmoid(a1)
+    a2 = np.dot(z1, W2) + b2
+    z2 = sigmoid(a2)
+    a3 = np.dot(z2, W3) + b3
+    y = softmax(a3)
+
+    return y
+
+
+x, t = get_data()
+network = init_network()
+accuracy_cnt = 0
+for i in range(len(x)):
+    y = predict(network, x[i])
+    p= np.argmax(y) # 확률이 가장 높은 원소의 인덱스를 얻는다.
+    if p == t[i]:
+        accuracy_cnt += 1
+
+print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+```
+	* get_data(): 데이터를 읽음
+	* init_network(): 네트워크 생성
+	* predict(): 가중치함수
+
+	* 함수의 빌드순서
+		1. mnist데이터를 get_data()로 x, t에 치환
+		2. 네트워크 활성화
+		3. for문을 돌며 predict()함수로 각 레이블의 확률을 넘파이 배열로 반환
+		4. np.argmax()로 배열에서 가장 큰 원소의 인덱스를 구함
+		5. 신경망이 예측한 확률과 정답 레이블을 비교하여 맞힌 수를 계산
+		6. 전체 이미지 숫자를 맞힌 수로 나눠 정확도를 구함
+	* 정규화: normalize가 True일경우 0.0~1.0범위로 변환하는 것 처럼 특정범위로 변환     
+	* 전처리: 신경망의 입력 데이터에 특정 변환을 가하는 것
+	* 위의 소스코드는 입력 이미지 데이터에 대한 전처리 작업으로 정규화 수행
+
+3.6.3 배치 처리
+	* 위의 코드를 바탕으로 차원의 원소수는 같음
+	* 이미지 데이터 1장의 경우
+	X         W1           W2             W3       ->    Y
+     784     784*50    50*100   100*10           10
+	* 이미지 데이터 여러장의 경우
+	X의 값이 Nx784가 고 Y는 100x10이 됨
+	100장의 데이터의 결과가 한번에 출력
+	* 이처럼 하나로 묶은 입력 데이터를 **배치처리** 라 함
+
+배치 처리 구현
+```python
+x, t = get_data()
+network = init_network()
+
+batch_size = 100 #배치 크기
+accuracy_cnt = 0
+for i in range(0, len(x), batch_size):
+    x_batch = x[i:i+batch_size] 
+	  #x[0:100],  x[1:101]등으로 100개씩 묶음
+	  y_batch = predict(network, x_batch)
+    p = np.argmax(y_batch, axis=1)
+	  # 1차원으로 구성된 것들중 큰 값의 인덱스들만 가져옴
+    accuracy_cnt += np.sum(p == t[i:i+batch_size])
+
+print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+```
+```python
+#argmax(x, axis=1)
+>>> x = np.array([0.1, 0.8, 0.1],[0.3, 0.1, 0.6],
+		  [0.2, 0.5, 0.3],[0.8, 0.1, 0.1])
+>>> y = np.argmax(x, axis=1)
+>>> print(y)
+[1 2 1 0]
+```
